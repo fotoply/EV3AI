@@ -38,8 +38,7 @@ signal.signal(signal.SIGINT, signal_handler)
 print('Press Ctrl+C to exit')
 
 # while True:
-testString = "frpr"
-
+testString = "frflflflflfrfrfr"
 for char in testString:
     print("Next command: " + char)
     if char == "f":
@@ -103,7 +102,7 @@ for char in testString:
             if sensorRight < 10 and previous == "w":
                 previous = "b"
                 counter += 1
-            elif sensorRight > 75 and previous == "b":
+            elif sensorRight > 70 and previous == "b":
                 previous = "w"
                 counter += 1
 
@@ -121,14 +120,36 @@ for char in testString:
             sensorLeft = lightSensorLeft.value()
             sensorRight = lightSensorRight.value()
 
+            # print("sensorLeft: ", sensorLeft, " sensorRight: ", sensorRight)
             diff = sensorRight - sensorLeft
-            motorRight.duty_cycle_sp = 80
-            motorLeft.duty_cycle_sp = motorRight.duty_cycle_sp * -0.8
+            motorLeft.duty_cycle_sp = BASE_SPEED - BASE_SPEED * (diff / 200)
+            motorRight.duty_cycle_sp = BASE_SPEED + BASE_SPEED * (diff / 200)
             timeout += 1
-            if sensorRight > LINE_THRESHOLD and sensorLeft > LINE_THRESHOLD and timeout > 20:
-                print("TsensorLeft: ", sensorLeft, " TsensorRight: ", sensorRight)
-                print("Left: " + str(motorLeft.duty_cycle_sp) + "/" + "Right: " + str(motorRight.duty_cycle_sp))
+
+            if timeout > 20:
                 break
+        motorRight.duty_cycle_sp = 0
+        motorLeft.duty_cycle_sp = 0
+
+        counter = 0
+        previous = "w"
+
+        while True:
+            sensorLeft = lightSensorLeft.value()
+
+            motorRight.duty_cycle_sp = 40
+            motorLeft.duty_cycle_sp = motorRight.duty_cycle_sp * -1
+
+            if sensorLeft < 10 and previous == "w":
+                previous = "b"
+                counter += 1
+            elif sensorLeft > 70 and previous == "b":
+                previous = "w"
+                counter += 1
+
+            if counter == 2:
+                break
+
 
     elif char == "b":
         sensorLeft = lightSensorLeft.value()
