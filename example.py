@@ -38,7 +38,7 @@ signal.signal(signal.SIGINT, signal_handler)
 print('Press Ctrl+C to exit')
 
 # while True:
-testString = "frflflflflfrfrfr"
+testString = "frfbrf"
 for char in testString:
     print("Next command: " + char)
     if char == "f":
@@ -152,33 +152,29 @@ for char in testString:
 
 
     elif char == "b":
-        sensorLeft = lightSensorLeft.value()
-        sensorRight = lightSensorRight.value()
+        previous = "w"
+        counter = 0
 
-        LINE_THRESHOLD = 10
-        while sensorLeft < LINE_THRESHOLD and sensorRight < LINE_THRESHOLD:
-            sensorLeft = lightSensorLeft.value()
-            sensorRight = lightSensorRight.value()
-
-            print("TsensorLeft: ", sensorLeft, " TsensorRight: ", sensorRight)
-            diff = sensorRight - sensorLeft
-            motorLeft.duty_cycle_sp = -(BACKWARDS_BASE_SPEED - BACKWARDS_BASE_SPEED * (diff / 200))
-            motorRight.duty_cycle_sp = -(BACKWARDS_BASE_SPEED + BACKWARDS_BASE_SPEED * (diff / 200))
-
-            print("Left: " + str(motorLeft.duty_cycle_sp) + "/" + "Right: " + str(motorRight.duty_cycle_sp))
         while True:
             sensorLeft = lightSensorLeft.value()
             sensorRight = lightSensorRight.value()
 
-            print("sensorLeft: ", sensorLeft, " sensorRight: ", sensorRight)
-            diff = sensorRight - sensorLeft
-            motorLeft.duty_cycle_sp = -(BACKWARDS_BASE_SPEED - BACKWARDS_BASE_SPEED * (diff / 200))
-            motorRight.duty_cycle_sp = -(BACKWARDS_BASE_SPEED + BACKWARDS_BASE_SPEED * (diff / 200))
+            motorLeft.duty_cycle_sp = -BACKWARDS_BASE_SPEED
+            motorRight.duty_cycle_sp = -BACKWARDS_BASE_SPEED
 
-            if sensorRight < LINE_THRESHOLD and sensorLeft < LINE_THRESHOLD:
+            if sensorLeft < 10 and sensorRight < 10 and previous == "w":
+                previous = "b"
+                counter += 1
+            elif sensorLeft > 75 and sensorRight > 75 and previous == "b":
+                previous = "w"
+                counter += 1
+
+            if counter == 3:
                 break
 
-            print("Left: " + str(motorLeft.duty_cycle_sp) + "/" + "Right: " + str(motorRight.duty_cycle_sp))
+        motorLeft.duty_cycle_sp = 0
+        motorRight.duty_cycle_sp = 0
+
     elif char == "p":
         sleep(10)
     motorLeft.duty_cycle_sp = 0
