@@ -40,6 +40,7 @@ signal.signal(signal.SIGINT, signal_handler)
 print('Press Ctrl+C to exit')
 
 # while True:
+
 testString = "ffffrffrflffolfrfrfforflflffforflflfffouffrfffrfflfffrflfflflffffolfrfrfforflflfforflflfffouffrffrfflffffflfflflfolfrfrffffolfrfrfforflflffforflflffo"
 oldTestString = "fffouflfolfrfffolfrfrfforflflffforflflfffo"
 for char in testString:
@@ -109,7 +110,7 @@ for char in testString:
                 previous = "w"
                 counter += 1
 
-            if counter == 2:
+            if counter >= 2:
                 break
 
 
@@ -185,10 +186,12 @@ for char in testString:
         sensorRight = lightSensorRight.value()
 
         timeout = 0
-        while timeout < 650:
+        while timeout < 400:
             motorLeft.duty_cycle_sp = BACKWARDS_BASE_SPEED
             motorRight.duty_cycle_sp = -BACKWARDS_BASE_SPEED
             timeout += 1
+
+        print("Counting for u turn")
 
         previous = "w"
         counter = 0
