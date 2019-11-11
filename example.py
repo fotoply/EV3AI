@@ -10,7 +10,7 @@ THRESHOLD_LEFT = 30
 THRESHOLD_RIGHT = 350
 
 BASE_SPEED = 50
-BACKWARDS_BASE_SPEED = BASE_SPEED*0.5
+BACKWARDS_BASE_SPEED = BASE_SPEED * 0.5
 TURN_SPEED = 80
 
 lightSensorLeft = ev3.ColorSensor('in1')
@@ -40,7 +40,7 @@ signal.signal(signal.SIGINT, signal_handler)
 print('Press Ctrl+C to exit')
 
 # while True:
-testString = "ffrflflfolfrfrfffolfrfrfforflflffforflflffforflflfo"
+testString = "fufufufufufufufufufufufufufufufufufufufu"
 for char in testString:
     print("Next command: " + char)
     if char == "f":
@@ -52,17 +52,17 @@ for char in testString:
             sensorLeft = lightSensorLeft.value()
             sensorRight = lightSensorRight.value()
 
-            #print("TsensorLeft: ", sensorLeft, " TsensorRight: ", sensorRight)
+            # print("TsensorLeft: ", sensorLeft, " TsensorRight: ", sensorRight)
             diff = sensorRight - sensorLeft
             motorLeft.duty_cycle_sp = BASE_SPEED - BASE_SPEED * (diff / 200)
             motorRight.duty_cycle_sp = BASE_SPEED + BASE_SPEED * (diff / 200)
 
-            #print("Left: " + str(motorLeft.duty_cycle_sp) + "/" + "Right: " + str(motorRight.duty_cycle_sp))
+            # print("Left: " + str(motorLeft.duty_cycle_sp) + "/" + "Right: " + str(motorRight.duty_cycle_sp))
         while True:
             sensorLeft = lightSensorLeft.value()
             sensorRight = lightSensorRight.value()
 
-            #print("sensorLeft: ", sensorLeft, " sensorRight: ", sensorRight)
+            # print("sensorLeft: ", sensorLeft, " sensorRight: ", sensorRight)
             diff = sensorRight - sensorLeft
             motorLeft.duty_cycle_sp = BASE_SPEED - BASE_SPEED * (diff / 200)
             motorRight.duty_cycle_sp = BASE_SPEED + BASE_SPEED * (diff / 200)
@@ -70,13 +70,13 @@ for char in testString:
             if sensorRight < LINE_THRESHOLD and sensorLeft < LINE_THRESHOLD:
                 break
 
-            #print("Left: " + str(motorLeft.duty_cycle_sp) + "/" + "Right: " + str(motorRight.duty_cycle_sp))
+            # print("Left: " + str(motorLeft.duty_cycle_sp) + "/" + "Right: " + str(motorRight.duty_cycle_sp))
     elif char == "r":
         sensorLeft = lightSensorLeft.value()
         sensorRight = lightSensorRight.value()
 
         LINE_THRESHOLD = 75
-        timeout=0
+        timeout = 0
         while True:
             sensorLeft = lightSensorLeft.value()
             sensorRight = lightSensorRight.value()
@@ -99,7 +99,7 @@ for char in testString:
             sensorRight = lightSensorRight.value()
 
             motorLeft.duty_cycle_sp = 40
-            motorRight.duty_cycle_sp = motorLeft.duty_cycle_sp*-1
+            motorRight.duty_cycle_sp = motorLeft.duty_cycle_sp * -1
 
             if sensorRight < 10 and previous == "w":
                 previous = "b"
@@ -181,12 +181,33 @@ for char in testString:
         sleep(10)
 
     elif char == "u":
-        timeout = 0
+        sensorRight = lightSensorRight.value()
 
-        while timeout < 1060:
+        timeout = 0
+        while timeout < 750:
             motorLeft.duty_cycle_sp = BACKWARDS_BASE_SPEED
             motorRight.duty_cycle_sp = -BACKWARDS_BASE_SPEED
             timeout += 1
+
+        previous = "w"
+        counter = 0
+
+        while True:
+            sensorRight = lightSensorRight.value()
+            motorLeft.duty_cycle_sp = BACKWARDS_BASE_SPEED
+            motorRight.duty_cycle_sp = -BACKWARDS_BASE_SPEED
+
+            if sensorRight < 10 and previous == "w":
+                previous = "b"
+                counter += 1
+            elif sensorRight > 75 and previous == "b":
+                previous = "w"
+                counter += 1
+
+            if counter == 2:
+                motorLeft.duty_cycle_sp = 0
+                motorRight.duty_cycle_sp = 0
+                break
 
     elif char == "o":
         sensorLeft = lightSensorLeft.value()
@@ -246,7 +267,6 @@ for char in testString:
 
         motorLeft.duty_cycle_sp = 0
         motorRight.duty_cycle_sp = 0
-
 
     motorLeft.duty_cycle_sp = 0
     motorRight.duty_cycle_sp = 0
