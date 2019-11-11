@@ -40,7 +40,8 @@ signal.signal(signal.SIGINT, signal_handler)
 print('Press Ctrl+C to exit')
 
 # while True:
-testString = "fufufufufufufufufufufufufufufufufufufufu"
+testString = "ffffrffrflffolfrfrfforflflffforflflfffouffrfffrfflfffrflfflflffffolfrfrfforflflfforflflfffouffrffrfflffffflfflflfolfrfrffffolfrfrfforflflffforflflffo"
+oldTestString = "fffouflfolfrfffolfrfrfforflflffforflflfffo"
 for char in testString:
     print("Next command: " + char)
     if char == "f":
@@ -127,7 +128,7 @@ for char in testString:
             motorRight.duty_cycle_sp = BASE_SPEED + BASE_SPEED * (diff / 200)
             timeout += 1
 
-            if timeout > 20:
+            if timeout > 25:
                 break
         motorRight.duty_cycle_sp = 0
         motorLeft.duty_cycle_sp = 0
@@ -184,7 +185,7 @@ for char in testString:
         sensorRight = lightSensorRight.value()
 
         timeout = 0
-        while timeout < 750:
+        while timeout < 650:
             motorLeft.duty_cycle_sp = BACKWARDS_BASE_SPEED
             motorRight.duty_cycle_sp = -BACKWARDS_BASE_SPEED
             timeout += 1
