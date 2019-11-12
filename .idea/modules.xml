@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/EV3AI.iml" filepath="$PROJECT_DIR$/.idea/EV3AI.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../simple-sokoban/.idea/sokoban.iml" filepath="$PROJECT_DIR$/../simple-sokoban/.idea/sokoban.iml" />
     </modules>
   </component>
 </project>
