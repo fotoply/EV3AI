@@ -40,26 +40,25 @@ signal.signal(signal.SIGINT, signal_handler)
 print('Press Ctrl+C to exit')
 
 # while True:
-
-testString = "ffffrffrflffolfrfrfforflflffforflflfffouffrfffrfflfffrflfflflffffolfrfrfforflflfforflflfffouffrffrfflffffflfflflfolfrfrffffolfrfrfforflflffforflflffo"
-oldTestString = "fffouflfolfrfffolfrfrfforflflffforflflfffo"
+#testString = "i"
+prev = ""
+testString = "flffffrffrflfforfflffoufrflfrffrfrfforflfflfflfrfouflfrffrfrfforflfflfoufrffffrffflffrflfflflffofforflfrflfrflfflffouffrffrflfrflfrffrfrforflfflfffoufffrffrfrforflflffouffrfflfffflfflflfolfrfrffoffolfrfrfforflflforflfflfforflfoufrfrfoufffrffrfrforflfflfoufrffrfrfolfrfouflfflflffo"
 for char in testString:
     print("Next command: " + char)
     if char == "f":
         sensorLeft = lightSensorLeft.value()
         sensorRight = lightSensorRight.value()
 
-        LINE_THRESHOLD = 10
+        LINE_THRESHOLD = 15
         while sensorLeft < LINE_THRESHOLD and sensorRight < LINE_THRESHOLD:
             sensorLeft = lightSensorLeft.value()
             sensorRight = lightSensorRight.value()
 
-            # print("TsensorLeft: ", sensorLeft, " TsensorRight: ", sensorRight)
             diff = sensorRight - sensorLeft
             motorLeft.duty_cycle_sp = BASE_SPEED - BASE_SPEED * (diff / 200)
             motorRight.duty_cycle_sp = BASE_SPEED + BASE_SPEED * (diff / 200)
 
-            # print("Left: " + str(motorLeft.duty_cycle_sp) + "/" + "Right: " + str(motorRight.duty_cycle_sp))
+            #print("Left: " + str(motorLeft.duty_cycle_sp) + "/" + "Right: " + str(motorRight.duty_cycle_sp))
         while True:
             sensorLeft = lightSensorLeft.value()
             sensorRight = lightSensorRight.value()
@@ -77,7 +76,15 @@ for char in testString:
         sensorLeft = lightSensorLeft.value()
         sensorRight = lightSensorRight.value()
 
-        LINE_THRESHOLD = 75
+        timeout = 0
+        while True:
+            motorLeft.duty_cycle_sp = -BASE_SPEED
+            motorRight.duty_cycle_sp = -BASE_SPEED
+            timeout += 1
+
+            if timeout > 10:
+                break
+
         timeout = 0
         while True:
             sensorLeft = lightSensorLeft.value()
@@ -89,7 +96,7 @@ for char in testString:
             motorRight.duty_cycle_sp = BASE_SPEED + BASE_SPEED * (diff / 200)
             timeout += 1
 
-            if timeout > 20:
+            if timeout > 25:
                 break
         motorRight.duty_cycle_sp = 0
         motorLeft.duty_cycle_sp = 0
@@ -103,10 +110,10 @@ for char in testString:
             motorLeft.duty_cycle_sp = 40
             motorRight.duty_cycle_sp = motorLeft.duty_cycle_sp * -1
 
-            if sensorRight < 10 and previous == "w":
+            if sensorRight < 15 and previous == "w":
                 previous = "b"
                 counter += 1
-            elif sensorRight > 70 and previous == "b":
+            elif sensorRight > 45 and previous == "b":
                 previous = "w"
                 counter += 1
 
@@ -143,10 +150,10 @@ for char in testString:
             motorRight.duty_cycle_sp = 40
             motorLeft.duty_cycle_sp = motorRight.duty_cycle_sp * -1
 
-            if sensorLeft < 10 and previous == "w":
+            if sensorLeft < 15 and previous == "w":
                 previous = "b"
                 counter += 1
-            elif sensorLeft > 70 and previous == "b":
+            elif sensorLeft > 45 and previous == "b":
                 previous = "w"
                 counter += 1
 
@@ -166,10 +173,10 @@ for char in testString:
             motorLeft.duty_cycle_sp = -(BACKWARDS_BASE_SPEED - diff / 25)
             motorRight.duty_cycle_sp = -(BACKWARDS_BASE_SPEED + diff / 25)
 
-            if sensorLeft < 10 and sensorRight < 10 and previous == "w":
+            if sensorLeft < 15 and sensorRight < 15 and previous == "w":
                 previous = "b"
                 counter += 1
-            elif sensorLeft > 75 and sensorRight > 75 and previous == "b":
+            elif sensorLeft > 50 and sensorRight > 50 and previous == "b":
                 previous = "w"
                 counter += 1
 
@@ -201,10 +208,10 @@ for char in testString:
             motorLeft.duty_cycle_sp = BACKWARDS_BASE_SPEED
             motorRight.duty_cycle_sp = -BACKWARDS_BASE_SPEED
 
-            if sensorRight < 10 and previous == "w":
+            if sensorRight < 15 and previous == "w":
                 previous = "b"
                 counter += 1
-            elif sensorRight > 75 and previous == "b":
+            elif sensorRight > 45 and previous == "b":
                 previous = "w"
                 counter += 1
 
@@ -220,7 +227,7 @@ for char in testString:
         counter = 0
         previous = "w"
         LINE_THRESHOLD = 10
-        REDUCED_SPEED = BASE_SPEED * 0.6
+        REDUCED_SPEED = BASE_SPEED * 1
         while sensorLeft < LINE_THRESHOLD and sensorRight < LINE_THRESHOLD:
             sensorLeft = lightSensorLeft.value()
             sensorRight = lightSensorRight.value()
@@ -259,10 +266,10 @@ for char in testString:
             motorLeft.duty_cycle_sp = -(BACKWARDS_BASE_SPEED - diff / 25)
             motorRight.duty_cycle_sp = -(BACKWARDS_BASE_SPEED + diff / 25)
 
-            if sensorLeft < 10 and sensorRight < 10 and previous == "w":
+            if sensorLeft < 15 and sensorRight < 15 and previous == "w":
                 previous = "b"
                 counter += 1
-            elif sensorLeft > 75 and sensorRight > 75 and previous == "b":
+            elif sensorLeft > 50 and sensorRight > 50 and previous == "b":
                 previous = "w"
                 counter += 1
 
@@ -272,5 +279,13 @@ for char in testString:
         motorLeft.duty_cycle_sp = 0
         motorRight.duty_cycle_sp = 0
 
+    elif char == "i":
+        while True:
+            sensorLeft = lightSensorLeft.value()
+            sensorRight = lightSensorRight.value()
+
+            print("TsensorLeft: ", sensorLeft, " TsensorRight: ", sensorRight)
+
     motorLeft.duty_cycle_sp = 0
     motorRight.duty_cycle_sp = 0
+    prev = char
