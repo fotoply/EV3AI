@@ -42,7 +42,7 @@ print('Press Ctrl+C to exit')
 # while True:
 #testString = "i"
 prev = ""
-testString = "flffffrffrflfforfflffoufrflfrffrfrfforflfflfflfrfouflfrffrfrfforflfflfoufrffffrffflffrflfflflffofforflfrflfrflfflffouffrffrflfrflfrffrfrforflfflfffoufffrffrfrforflflffouffrfflfffflfflflfolfrfrffoffolfrfrfforflflforflfflfforflfoufrfrfoufffrffrfrforflfflfoufrffrfrfolfrfouflfflflffo"
+testString = "flffffrffrflfforfflffforflflfffolflffrffrflfrffrfrfforflflfffoufffrfflffrflfflflffoffolfrfrfforflflfforflfflfoufrfrfffouffrfffrfflfffflfflflfolfrfrffoffolfrfrfforflflffoffolfoufflflfo"
 for char in testString:
     print("Next command: " + char)
     if char == "f":
@@ -100,6 +100,12 @@ for char in testString:
                 break
         motorRight.duty_cycle_sp = 0
         motorLeft.duty_cycle_sp = 0
+
+        sensorRight = lightSensorRight.value()
+        while sensorRight < 15:
+            sensorRight = lightSensorRight.value()
+            motorLeft.duty_cycle_sp = 40
+            motorRight.duty_cycle_sp = motorLeft.duty_cycle_sp * -1
 
         counter = 0
         previous = "w"
