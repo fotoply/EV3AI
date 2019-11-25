@@ -9,9 +9,9 @@ motorLeft = ev3.LargeMotor('outB')
 THRESHOLD_LEFT = 30
 THRESHOLD_RIGHT = 350
 
-BASE_SPEED = 50
+BASE_SPEED = 55
 BACKWARDS_BASE_SPEED = BASE_SPEED * 0.5
-TURN_SPEED = 80
+TURN_SPEED = 50
 
 lightSensorLeft = ev3.ColorSensor('in1')
 lightSensorRight = ev3.ColorSensor('in2')
@@ -39,10 +39,8 @@ def signal_handler(sig, frame):
 signal.signal(signal.SIGINT, signal_handler)
 print('Press Ctrl+C to exit')
 
-# while True:
-#testString = "i"
 prev = ""
-testString = "flffffrffrflfforfflffforflflfffolflffrffrflfrffrfrfforflflfffoufffrfflffrflfflflffoffolfrfrfforflflfforflfflfoufrfrfffouffrfffrfflfffflfflflfolfrfrffoffolfrfrfforflflffoffolfoufflflfo"
+testString = "fffffrfouffrffrfrffffforflflfforflfflfflflffouflffrffrflforfflfflflfolfrfrffouflfflfolforflffforflflfforflffrffrfrforflflfouflfflflforffrffffrffrfrforflflffforflflffoufrfffflfrffrfrffffforflflfo"
 for char in testString:
     print("Next command: " + char)
     if char == "f":
@@ -58,7 +56,7 @@ for char in testString:
             motorLeft.duty_cycle_sp = BASE_SPEED - BASE_SPEED * (diff / 200)
             motorRight.duty_cycle_sp = BASE_SPEED + BASE_SPEED * (diff / 200)
 
-            #print("Left: " + str(motorLeft.duty_cycle_sp) + "/" + "Right: " + str(motorRight.duty_cycle_sp))
+            # print("Left: " + str(motorLeft.duty_cycle_sp) + "/" + "Right: " + str(motorRight.duty_cycle_sp))
         while True:
             sensorLeft = lightSensorLeft.value()
             sensorRight = lightSensorRight.value()
@@ -78,8 +76,8 @@ for char in testString:
 
         timeout = 0
         while True:
-            motorLeft.duty_cycle_sp = -BASE_SPEED
-            motorRight.duty_cycle_sp = -BASE_SPEED
+            motorLeft.duty_cycle_sp = -TURN_SPEED
+            motorRight.duty_cycle_sp = -TURN_SPEED
             timeout += 1
 
             if timeout > 10:
@@ -92,8 +90,8 @@ for char in testString:
 
             # print("sensorLeft: ", sensorLeft, " sensorRight: ", sensorRight)
             diff = sensorRight - sensorLeft
-            motorLeft.duty_cycle_sp = BASE_SPEED - BASE_SPEED * (diff / 200)
-            motorRight.duty_cycle_sp = BASE_SPEED + BASE_SPEED * (diff / 200)
+            motorLeft.duty_cycle_sp = TURN_SPEED - TURN_SPEED * (diff / 200)
+            motorRight.duty_cycle_sp = TURN_SPEED + TURN_SPEED * (diff / 200)
             timeout += 1
 
             if timeout > 25:
@@ -138,8 +136,8 @@ for char in testString:
             sensorRight = lightSensorRight.value()
 
             diff = sensorRight - sensorLeft
-            motorLeft.duty_cycle_sp = BASE_SPEED - BASE_SPEED * (diff / 200)
-            motorRight.duty_cycle_sp = BASE_SPEED + BASE_SPEED * (diff / 200)
+            motorLeft.duty_cycle_sp = TURN_SPEED - TURN_SPEED * (diff / 200)
+            motorRight.duty_cycle_sp = TURN_SPEED + TURN_SPEED * (diff / 200)
             timeout += 1
 
             if timeout > 25:
